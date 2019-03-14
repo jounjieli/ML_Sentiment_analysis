@@ -1,1 +1,8 @@
-# Sentiment_analysis
+# 情感分析
+
+## 語料 ##
+
+語料為[譚松波教授整理的中文情感挖掘語料-ChnSentiCorp](http://www.nlpir.org/wordpress/2017/09/04/%E4%B8%AD%E6%96%87%E6%83%85%E6%84%9F%E6%8C%96%E6%8E%98%E8%AF%AD%E6%96%99-chnsenticorp/)
+
+說明：譚松波收集整理了一個較大規模的酒店評論語料語料規模為10000篇語料從攜程網上自動採集，並經過整理而成。
+
