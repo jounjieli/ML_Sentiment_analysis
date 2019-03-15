@@ -9,6 +9,7 @@ from opencc import OpenCC
 from gensim.models import word2vec
 import logging
 import shutil
+import os
 
 def jieba_string_segmentation(string,delimiter=' ',stopword_path=None,split=False,encoding='utf-8'):
     """
@@ -94,6 +95,8 @@ def jieba_file_segmentation(file_path,save_path,replace_old=False,word_delimiter
 def file_to_opencc(file_path,save_path,replace_old=False,conversion='s2t'):
     """
     batch using dir_file_call_function()
+    close log using "logging.disable(lvl)"
+    https://docs.python.org/3/library/logging.html
     opencc:
     https://github.com/yichen0831/opencc-python
     conversion: 
@@ -108,32 +111,39 @@ def file_to_opencc(file_path,save_path,replace_old=False,conversion='s2t'):
     tw2s: Traditional Chinese (Taiwan standard) to Simplified Chinese
     tw2sp: Traditional Chinese (Taiwan standard) to Simplified Chinese (with phrases)
     """
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     cc = OpenCC(conversion)
     string = ''
     with open(file_path,'r',encoding='utf-8') as read_f:
         with open(save_path,'w',encoding='utf-8') as write_f:
-            for read_line in read_f:
+            for texts_num,read_line in enumerate(read_f):
                 file_str =  cc.convert(read_line)
                 write_f.writelines(file_str)
+                if (texts_num + 1) % 10000 == 0:
+                    logging.info("已完成前 %d 行的轉換" % (texts_num + 1))
     if replace_old == True:
         shutil.move(save_path,file_path)
         
-def word2vec_train(file_path,save_path,replace_old=False,dir_path=None):
+def word2vec_train(file_path,save_path,dir_path=None,save_name='word2vec_model',replace_old=False,
+                   model_size=300,model_window=10,model_min_count=5,**kw):
     """
-    batch using dir_file_call_function()
+    batch train usage: set dir_path、save_name, file_path = None, save_path = None
     if Multiple files using dir_path
     """
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     # https://radimrehurek.com/gensim/models/word2vec.html
-    if dir_path != None:
+    if file_path != None:
         #單檔案
         sentences = word2vec.LineSentence(file_path)
-    if dir_path == None and file_path != None:
+        model = word2vec.Word2Vec(sentences, size=model_size,window=model_window,min_count=model_min_count,**kw)
+        #保存模型，供日後使用
+        model.save(save_path)
+    if dir_path != None and file_path == None:
         #多檔案
-        sentences = word2vec.PathLineSentences(file_path)
-    model = word2vec.Word2Vec(sentences, size=300,window=10,min_count=5)
-    #保存模型，供日後使用
-    model.save(save_path)
+        sentences = word2vec.PathLineSentences(dir_path)
+        model = word2vec.Word2Vec(sentences, size=model_size,window=model_window,min_count=model_min_count,**kw)
+        #保存模型，供日後使用
+        model.save(os.path.join(dir_path,save_name))
     #模型讀取方式
     # model = word2vec.Word2Vec.load("your_model_name")
 
