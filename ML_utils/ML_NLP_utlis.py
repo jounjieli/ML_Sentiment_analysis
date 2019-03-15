@@ -57,7 +57,8 @@ def str_to_opencc(string,conversion='s2t'):
     out =  cc.convert(string)
     return out
 
-def jieba_file_segmentation(file_path,save_path,replace_old=False,word_delimiter=' ',file_delimiter='\n',stopword_path=None,encoding='utf-8'):
+def jieba_file_segmentation(file_path,save_path,replace_old=False,word_delimiter=' ',
+                            file_delimiter='\n',stopword_path=None,encoding='utf-8'):
     """
     batch using dir_file_call_function()
     close log using "logging.disable(lvl)"
@@ -92,7 +93,7 @@ def jieba_file_segmentation(file_path,save_path,replace_old=False,word_delimiter
     if replace_old == True:
         shutil.move(save_path,file_path)
 
-def file_to_opencc(file_path,save_path,replace_old=False,conversion='s2t'):
+def file_to_opencc(file_path,save_path,replace_old=False,conversion='s2t',encoding='utf-8'):
     """
     batch using dir_file_call_function()
     close log using "logging.disable(lvl)"
@@ -114,8 +115,8 @@ def file_to_opencc(file_path,save_path,replace_old=False,conversion='s2t'):
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     cc = OpenCC(conversion)
     string = ''
-    with open(file_path,'r',encoding='utf-8') as read_f:
-        with open(save_path,'w',encoding='utf-8') as write_f:
+    with open(file_path,'r',encoding=encoding) as read_f:
+        with open(save_path,'w',encoding=encoding) as write_f:
             for texts_num,read_line in enumerate(read_f):
                 file_str =  cc.convert(read_line)
                 write_f.writelines(file_str)

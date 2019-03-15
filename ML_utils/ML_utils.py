@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[30]:
+# In[2]:
 
 
 """
@@ -67,7 +67,7 @@ def get_dir_file_list(dir_path,filter_=None,distinguish=False,regular=False):
 def str_remove_LR(str_in):
     str_out = re.sub(r"\n", r"", str_in)
     return str_out
-def merge_dir_file(dir_path,save_name='dir_file_merge',filter=None,add_line_Feed=False,file_remove_LR=False):
+def merge_dir_file(dir_path,save_name='dir_file_merge',filter=None,add_line_Feed=False,file_remove_LR=False,encoding='utf-8'):
     """
     ::parameter::
     filter: Filter files whose file names do not include strings
@@ -79,25 +79,41 @@ def merge_dir_file(dir_path,save_name='dir_file_merge',filter=None,add_line_Feed
     save_path = os.path.join(dir_path,save_name)
     for file_name in file_list: 
         file_path = os.path.join(dir_path,file_name)
-        with open(file_path,'r',encoding='utf-8') as f:
+        with open(file_path,'r',encoding=encoding) as f:
             read_file = f.read()
             if file_remove_LR == True:
                 read_file = str_remove_LR(read_file)
             file_merge += read_file
             if add_line_Feed == True:
                 file_merge = file_merge + '\n'
-    with open(save_path,'w',encoding='utf-8') as save:
+    with open(save_path,'w',encoding=encoding) as save:
         save.write(file_merge)
     return file_merge
 
-def file_remove_repeat_row(file_path,save_path,replace_old=False):
+def file_remove_repeat_row(file_path,save_path,replace_old=False,encoding='utf-8'):
     """
     batch using dir_file_call_function()
     """
-    with open(file_path, 'r',encoding='utf-8') as f:
+    with open(file_path, 'r',encoding=encoding) as f:
         out = ''.join(list(set([i for i in f])))
-    with open(save_path, 'w',encoding='utf-8') as f:
+    with open(save_path, 'w',encoding=encoding) as f:
         f.write(out)
+    if replace_old == True:
+        shutil.move(save_path,file_path)
+        
+def filter_word_len(file_path,save_path,max_word_num,split=' ',replace_old=False,encoding='utf-8'):
+    """
+    Filter out longer than max_word_num
+    """
+    with open(file_path,'r',encoding=encoding) as f:
+        with open(save_path, 'w',encoding=encoding) as f_wrtie:
+            for line in f:
+                #依行讀取
+                line_ = line.strip('\n')
+                word_list = line_.split(split)
+                if len(word_list) < max_word_num:
+                    line_ = line_+'\n'
+                    f_wrtie.write(line_)
     if replace_old == True:
         shutil.move(save_path,file_path)
     
