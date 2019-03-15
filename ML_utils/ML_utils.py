@@ -12,6 +12,7 @@ import os
 import re
 import sys 
 import shutil
+import pandas as pd
 
 #取得文件資料列表(包括資料夾)
 def get_dir_file_list(dir_path,filter_=None,distinguish=False,regular=False):
@@ -67,14 +68,15 @@ def get_dir_file_list(dir_path,filter_=None,distinguish=False,regular=False):
 def str_remove_LR(str_in):
     str_out = re.sub(r"\n", r"", str_in)
     return str_out
-def merge_dir_file(dir_path,save_name='dir_file_merge',filter=None,add_line_Feed=False,file_remove_LR=False,encoding='utf-8'):
+def merge_dir_file(dir_path,save_name='dir_file_merge',filter_=None,regular=False,
+                   add_line_Feed=True,file_remove_LR=False,encoding='utf-8'):
     """
     ::parameter::
     filter: Filter files whose file names do not include strings
     file_remove_LR: read file and  remove LR
     add_line_Feed: add LR after file merge    
     """
-    file_list = get_dir_file_list(dir_path,filter)
+    file_list = get_dir_file_list(dir_path,filter_=filter_,regular=False)
     file_merge = ""
     save_path = os.path.join(dir_path,save_name)
     for file_name in file_list: 
@@ -116,10 +118,17 @@ def filter_word_len(file_path,save_path,max_word_num,split=' ',replace_old=False
                     f_wrtie.write(line_)
     if replace_old == True:
         shutil.move(save_path,file_path)
+        
+def Trim_the_number_of_rows(file_path,save_path,row_num=1000,replace_old=False,encoding='utf-8',sep='\n'):
+    data = pd.read_csv(file_path,encoding=encoding,sep=sep,header=-1)
+    data[:1000].to_csv(save_path,sep='\n',header=False,index=False)
+    if replace_old == True:
+        shutil.move(save_path,file_path)
     
 def dir_file_call_function(dir_path,function,file_head_name='new_',replace_old=False,filter_=None,regular=False,**kw):
     """
     **kw ==>> function(file_path=file_path,save_path=save_path,**kw)    ex. conversion='s2t'
+    expansion: def function(file_path,save_path,replace_old,....)
     """
     file_list = get_dir_file_list(dir_path=dir_path,filter_=filter_,regular=regular,distinguish=True)
     file_list = file_list[0]
