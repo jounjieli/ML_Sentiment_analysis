@@ -5,7 +5,6 @@
 
 
 from ML_utils import ML_utils
-from ML_utils import ML_NLP_utlis
 import shutil
 import os
 
@@ -28,10 +27,6 @@ ML_utils.CallF_DirFile_save(dir_path, ML_utils.Trim_file_rows,replace_old=True,
                                 filter_='cut_',row_num=1000)
 sentiment_2_daat = ML_utils.Merge_dir_file(dir_path,save_name='sentiment_2_daat.txt',
                                            add_line_Feed=False,file_remove_LR=False,filter_='cut_')
-with open(os.path.join(dir_path,'README.md'),'w',encoding='utf-8') as f:
-    f.write(
-    """### sentiment_2_daat ###\n格式為負評1000筆,正評1000筆共2000筆，以'\\n'隔開，每筆資料格式為長度小於等於60的字,以' '隔開。
-    """)
 
 
 # In[3]:
