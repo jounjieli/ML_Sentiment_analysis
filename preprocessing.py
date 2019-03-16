@@ -21,10 +21,10 @@ shutil.move(os.path.join(data_neg_dir_path,'merge_neg.txt'), os.path.join(dir_pa
 ML_utils.CallF_DirFile_save(dir_path, ML_utils.Remove_file_repeat_row, replace_old=True)
 ML_utils.CallF_DirFile_save(dir_path, ML_utils.Opencc_file, replace_old=True)
 ML_utils.CallF_DirFile_save(dir_path, ML_utils.Jieba_file_segmentation, replace_old=True)
-ML_utils.CallF_DirFile_save(dir_path, ML_utils.Filter_file_wlen,replace_old=False, regular=True,filter_='^merge',
+ML_utils.CallF_DirFile_save(dir_path, ML_utils.Filter_file_wlen,replace_old=False, regular=True,file_filter_='^merge',
                                 max_word_num=60,file_head_name='cut_')
 ML_utils.CallF_DirFile_save(dir_path, ML_utils.Trim_file_rows,replace_old=True,
-                                filter_='cut_',row_num=1000)
+                                file_filter_='cut_',row_num=1000)
 sentiment_2_daat = ML_utils.Merge_dir_file(dir_path,save_name='sentiment_2_daat.txt',
-                                           add_line_Feed=False,file_remove_LR=False,filter_='cut_')
+                                           add_line_Feed=False,file_remove_LR=False,file_filter_='cut_')
 

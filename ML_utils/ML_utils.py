@@ -15,7 +15,7 @@ import shutil
 import logging
 
 #取得文件資料列表(包括資料夾)
-def Get_dir_file_list(dir_path,filter_=None,distinguish=False,regular=False):
+def Get_dir_file_list(dir_path,file_filter_=None,distinguish=False,regular=False):
     """
     filter: Filter files whose file names do not include strings
     distinguish: Distinguish between folders and file,True=Distinguish
@@ -26,22 +26,22 @@ def Get_dir_file_list(dir_path,filter_=None,distinguish=False,regular=False):
     dir_list_ = []
     #---#
     if distinguish == False:
-        if filter_ == None:
+        if file_filter_ == None:
             for file in file_list:
                 file_list_.append(file)
         else:
             if regular == False:
                 for file in file_list:
-                    if filter_ in file:
+                    if file_filter_ in file:
                         file_list_.append(file)
             if regular == True:
                 for file in file_list:
-                    if re.search(filter_, file) != None:
+                    if re.search(file_filter_, file) != None:
                         file_list_.append(file)       
         file_list = file_list_
     #---#
     if distinguish == True:
-        if filter_ == None:
+        if file_filter_ == None:
             for file in file_list:
                 if os.path.isfile( os.path.join(dir_path,file) ) == True:
                     file_list_.append(file)
@@ -50,14 +50,14 @@ def Get_dir_file_list(dir_path,filter_=None,distinguish=False,regular=False):
         else:
             if regular == False:
                 for file in file_list:
-                    if filter_ in file:
+                    if file_filter_ in file:
                         if os.path.isfile( os.path.join(dir_path,file) ) == True:
                             file_list_.append(file)
                         elif os.path.isdir( os.path.join(dir_path,file) ) == True:
                             dir_list_.append(file)
             if regular == True:
                 for file in file_list:
-                    if re.search(filter_, file) != None:
+                    if re.search(file_filter_, file) != None:
                         if os.path.isfile( os.path.join(dir_path,file) ) == True:
                             file_list_.append(file)
                         elif os.path.isdir( os.path.join(dir_path,file) ) == True:
@@ -65,24 +65,24 @@ def Get_dir_file_list(dir_path,filter_=None,distinguish=False,regular=False):
         file_list = [file_list_,dir_list_]
     return file_list
 
-def CallF_DirFile_save(dir_path,function,file_head_name='new_',replace_old=False,filter_=None,regular=False,**kw):
+def CallF_DirFile_save(dir_path,function,file_head_name='new_',replace_old=False,file_filter_=None,regular=False,**kw):
     """
     **kw ==>> function(file_path=file_path,save_path=save_path,**kw)    ex. conversion='s2t'
     expansion: def function(file_path,save_path,replace_old,....)
     """
-    file_list = Get_dir_file_list(dir_path=dir_path,filter_=filter_,regular=regular,distinguish=True)
+    file_list = Get_dir_file_list(dir_path=dir_path,file_filter_=file_filter_,regular=regular,distinguish=True)
     file_list = file_list[0]
     for file_name in file_list:
         file_path = os.path.join(dir_path,file_name)
         save_path = os.path.join(dir_path,file_head_name+file_name)
         function(file_path=file_path,save_path=save_path,replace_old=replace_old,**kw)
         
-def CallF_DirFile(dir_path,function,filter_=None,regular=False,**kw):
+def CallF_DirFile(dir_path,function,file_filter_=None,regular=False,**kw):
     """
     **kw ==>> function(file_path=file_path,save_path=save_path,**kw)    ex. conversion='s2t'
     expansion: def function(file_path,save_path,replace_old,....)
     """
-    file_list = Get_dir_file_list(dir_path=dir_path,filter_=filter_,regular=regular,distinguish=True)
+    file_list = Get_dir_file_list(dir_path=dir_path,file_filter_=file_filter_,regular=regular,distinguish=True)
     file_list = file_list[0]
     save_list = []
     for file_name in file_list:
@@ -90,7 +90,7 @@ def CallF_DirFile(dir_path,function,filter_=None,regular=False,**kw):
         save_list.append(function(file_path=file_path,**kw))
     return save_list
 
-def Merge_dir_file(dir_path,save_name='dir_file_merge',filter_=None,regular=False,
+def Merge_dir_file(dir_path,save_name='dir_file_merge',file_filter_=None,regular=False,
                    add_line_Feed=True,file_remove_LR=False,encoding='utf-8'):
     """
     ::parameter::
@@ -98,7 +98,7 @@ def Merge_dir_file(dir_path,save_name='dir_file_merge',filter_=None,regular=Fals
     file_remove_LR: read file and  remove LR
     add_line_Feed: add LR after file merge    
     """
-    file_list = Get_dir_file_list(dir_path,filter_=filter_,regular=False)
+    file_list = Get_dir_file_list(dir_path,file_filter_=file_filter_,regular=False)
     file_merge = ""
     save_path = os.path.join(dir_path,save_name)
     for file_name in file_list: 
