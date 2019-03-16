@@ -4,9 +4,6 @@
 # In[1]:
 
 
-import jieba
-from opencc import OpenCC
-from gensim.models import word2vec
 import logging
 import shutil
 import os
@@ -16,6 +13,7 @@ def jieba_string_segmentation(string,delimiter=' ',stopword_path=None,split=Fals
     split: string to list
     stopword_path: delimiter of stopword must is '\n'
     """
+    import jieba
     # jieba custom setting.
     jieba.set_dictionary('jieba_dict/dict.txt.big')
     # load stopwords set
@@ -53,6 +51,7 @@ def str_to_opencc(string,conversion='s2t'):
     tw2s: Traditional Chinese (Taiwan standard) to Simplified Chinese
     tw2sp: Traditional Chinese (Taiwan standard) to Simplified Chinese (with phrases)
     """
+    from opencc import OpenCC
     cc = OpenCC(conversion)
     out =  cc.convert(string)
     return out
@@ -65,6 +64,7 @@ def jieba_file_segmentation(file_path,save_path,replace_old=False,word_delimiter
     https://docs.python.org/3/library/logging.html
     stopword_path: delimiter of stopword must is '\n'
     """
+    import jieba
     #設置log格式，以及print的log等級
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     # jieba custom setting.
@@ -112,6 +112,7 @@ def file_to_opencc(file_path,save_path,replace_old=False,conversion='s2t',encodi
     tw2s: Traditional Chinese (Taiwan standard) to Simplified Chinese
     tw2sp: Traditional Chinese (Taiwan standard) to Simplified Chinese (with phrases)
     """
+    from opencc import OpenCC
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     cc = OpenCC(conversion)
     string = ''
@@ -131,6 +132,7 @@ def word2vec_train(file_path,save_path,dir_path=None,save_name='word2vec_model',
     batch train usage: set dir_path、save_name, file_path = None, save_path = None
     if Multiple files using dir_path
     """
+    from gensim.models import word2vec
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     # https://radimrehurek.com/gensim/models/word2vec.html
     if file_path != None:
