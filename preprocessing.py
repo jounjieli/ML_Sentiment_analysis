@@ -7,6 +7,8 @@
 from ML_utils import ML_utils
 import shutil
 import os
+import numpy as np
+from gensim.models import word2vec
 
 #從Dateset合併資料
 data_pos_dir_path = r'D:\Backup\ml_data\Data_set\NLP\sentiment_analysis\utf-8\6000\6000\pos'
@@ -27,4 +29,20 @@ ML_utils.CallF_DirFile_save(dir_path, ML_utils.Trim_file_rows,replace_old=True,
                                 file_filter_='cut_',row_num=1000)
 sentiment_2_daat = ML_utils.Merge_dir_file(dir_path,save_name='sentiment_2_daat.txt',
                                            add_line_Feed=False,file_remove_LR=False,file_filter_='cut_')
+
+
+# In[2]:
+
+
+#轉成list，長度不足填補0
+line_list = ML_utils.CallF_DirFile(dir_path,ML_utils.WordToList_file,max_word_num=60,padding=0,file_filter_='sentiment')[0]
+#載入word2vec模型
+model_path = r'D:\Backup\ml_data\GitHub\ML_Sentiment_analysis\word2vec_model\word2vec_model'
+model = word2vec.Word2Vec.load(model_path)
+#vec_padding
+vec_padding = np.zeros((1,300),np.float32)
+ML_utils.ToVec_list_save(line_list,os.path.join(dir_path,'vec_x_neg1000_pos1000'),
+                         model,vec_padding,word_padding=0,word_padding_vec=vec_padding)
+y = np.concatenate( (np.full(1000,0),np.full(1000,1)) )
+np.save(os.path.join(dir_path,'vec_y_neg1000_pos1000'),y)
 

@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[25]:
+# In[1]:
 
 
 """
@@ -65,6 +65,7 @@ def Get_dir_file_list(dir_path,file_filter_=None,distinguish=False,regular=False
         file_list = [file_list_,dir_list_]
     return file_list
 
+#資料夾內檔案由function處理完後儲存
 def CallF_DirFile_save(dir_path,function,file_head_name='new_',replace_old=False,file_filter_=None,regular=False,**kw):
     """
     **kw ==>> function(file_path=file_path,save_path=save_path,**kw)    ex. conversion='s2t'
@@ -76,9 +77,11 @@ def CallF_DirFile_save(dir_path,function,file_head_name='new_',replace_old=False
         file_path = os.path.join(dir_path,file_name)
         save_path = os.path.join(dir_path,file_head_name+file_name)
         function(file_path=file_path,save_path=save_path,replace_old=replace_old,**kw)
-        
+
+#資料夾內檔案由function處理完後存成list返回
 def CallF_DirFile(dir_path,function,file_filter_=None,regular=False,**kw):
     """
+    return list
     **kw ==>> function(file_path=file_path,save_path=save_path,**kw)    ex. conversion='s2t'
     expansion: def function(file_path,save_path,replace_old,....)
     """
@@ -90,6 +93,7 @@ def CallF_DirFile(dir_path,function,file_filter_=None,regular=False,**kw):
         save_list.append(function(file_path=file_path,**kw))
     return save_list
 
+#合併資料夾內文件，儲存
 def Merge_dir_file(dir_path,save_name='dir_file_merge',file_filter_=None,regular=False,
                    add_line_Feed=True,file_remove_LR=False,encoding='utf-8'):
     """
@@ -116,7 +120,8 @@ def Merge_dir_file(dir_path,save_name='dir_file_merge',file_filter_=None,regular
 def Remove_str_LR(str_in):
     str_out = re.sub(r"\n", r"", str_in)
     return str_out
-                        
+
+#移除文件中重複的row，儲存
 def Remove_file_repeat_row(file_path,save_path,replace_old=False,encoding='utf-8'):
     """
     batch using dir_file_call_function()
@@ -128,32 +133,7 @@ def Remove_file_repeat_row(file_path,save_path,replace_old=False,encoding='utf-8
     if replace_old == True:
         shutil.move(save_path,file_path)
 
-def WordToList_file(file_path,encoding='utf-8',max_word_num=None,word_split=' ',row_split='\n',padding=None):
-    with open(file_path,'r',encoding=encoding) as f:
-        save_list = []
-        if max_word_num == None:
-            for line in f:
-                line_ = line.strip('\n').strip()
-                word_list = line_.split(word_split)
-                save_list.append(word_list)
-        if max_word_num != None:
-            if padding == None:
-                for line in f:
-                    line_ = line.strip('\n').strip()
-                    word_list = line_.split(word_split)
-                    if len(word_list) <= max_word_num:
-                        save_list.append(word_list)
-            if padding != None:
-                for line in f:
-                    padding_seq = ''
-                    line_ = line.strip('\n').strip()
-                    word_list = line_.split(word_split)
-                    if len(word_list) <= max_word_num:
-                        for num in range(max_word_num-len(word_list)):
-                            word_list.append(padding)
-                        save_list.append(word_list)
-    return save_list
-        
+#過濾文件中長度大於max_word_num的row，儲存
 def Filter_file_wlen(file_path,save_path,max_word_num,replace_old=False,encoding='utf-8',
                      word_split=' ',row_split='\n',padding=None):
     """
@@ -182,7 +162,8 @@ def Filter_file_wlen(file_path,save_path,max_word_num,replace_old=False,encoding
                         f_wrtie.write(padding_seq)
     if replace_old == True:
         shutil.move(save_path,file_path)
-        
+
+#填補文件row中字數小於max_word_num，儲存
 def Padding_file_lword(file_path,save_path,max_word_num,replace_old=False,encoding='utf-8',
                        padding='my_padding_str',word_split=' ',row_split='\n'):
     """
@@ -205,6 +186,7 @@ def Padding_file_lword(file_path,save_path,max_word_num,replace_old=False,encodi
     if replace_old == True:
         shutil.move(save_path,file_path)    
 
+#裁切文件row數
 def Trim_file_rows(file_path,save_path,row_num=1000,n_times=False,replace_old=False,encoding='utf-8',sep='\n'):
     import pandas as pd
     num = 1
@@ -215,6 +197,7 @@ def Trim_file_rows(file_path,save_path,row_num=1000,n_times=False,replace_old=Fa
     if replace_old == True:
         shutil.move(save_path,file_path)
 
+#分詞str返回str
 def Jieba_str_segmentation(string,delimiter=' ',stopword_path=None,split=False,encoding='utf-8'):
     """
     split: string to list
@@ -242,6 +225,7 @@ def Jieba_str_segmentation(string,delimiter=' ',stopword_path=None,split=False,e
         output = output.split(delimiter)
     return output
 
+#轉換str返回str
 def Opencc_str(string,conversion='s2t'):
     """
     opencc:
@@ -263,6 +247,7 @@ def Opencc_str(string,conversion='s2t'):
     out =  cc.convert(string)
     return out
 
+#分詞文件，儲存
 def Jieba_file_segmentation(file_path,save_path,replace_old=False,word_delimiter=' ',
                             file_delimiter='\n',stopword_path=None,encoding='utf-8'):
     """
@@ -300,6 +285,7 @@ def Jieba_file_segmentation(file_path,save_path,replace_old=False,word_delimiter
     if replace_old == True:
         shutil.move(save_path,file_path)
 
+#轉換文件，儲存
 def Opencc_file(file_path,save_path,replace_old=False,conversion='s2t',encoding='utf-8'):
     """
     batch using dir_file_call_function()
@@ -332,7 +318,8 @@ def Opencc_file(file_path,save_path,replace_old=False,conversion='s2t',encoding=
                     logging.info("已完成前 %d 行的轉換" % (texts_num + 1))
     if replace_old == True:
         shutil.move(save_path,file_path)
-        
+
+#文件訓練word2vec，儲存
 def Word2vec_train(file_path,save_path,dir_path=None,save_name='word2vec_model',replace_old=False,
                    model_size=300,model_window=10,model_min_count=5,**kw):
     """
@@ -356,4 +343,143 @@ def Word2vec_train(file_path,save_path,dir_path=None,save_name='word2vec_model',
         model.save(os.path.join(dir_path,save_name))
     #模型讀取方式
     # model = word2vec.Word2Vec.load("your_model_name") 
+
+#文件的字轉成list，返回list
+def WordToList_file(file_path,encoding='utf-8',max_word_num=None,word_split=' ',row_split='\n',padding=None):
+    with open(file_path,'r',encoding=encoding) as f:
+        save_list = []
+        if max_word_num == None:
+            for line in f:
+                line_ = line.strip('\n').strip()
+                word_list = line_.split(word_split)
+                save_list.append(word_list)
+        if max_word_num != None:
+            if padding == None:
+                for line in f:
+                    line_ = line.strip('\n').strip()
+                    word_list = line_.split(word_split)
+                    if len(word_list) <= max_word_num:
+                        save_list.append(word_list)
+            if padding != None:
+                for line in f:
+                    padding_seq = ''
+                    line_ = line.strip('\n').strip()
+                    word_list = line_.split(word_split)
+                    if len(word_list) <= max_word_num:
+                        for num in range(max_word_num-len(word_list)):
+                            word_list.append(padding)
+                        save_list.append(word_list)
+    return save_list
+    
+#文件依word2vec模型轉vec後存成npy
+def ToVec_file_save(file_path,save_path,vec_model,vec_padding,
+                replace_old=False,encoding='utf-8',word_padding=None,word_padding_vec=None,dim=300):
+    """
+    vec_model : Word2vec model
+    dim = Dimension of Word2vec
+    vec_padding: Words that are not found in 'word2vec' are filled.
+    word_padding: Padded words in the line of original file
+    word_padding_vec: vec of word_padding
+    """
+    import numpy as np
+    with open(file_path,'r',encoding=encoding) as f:
+        X = []
+        for line in f:
+            vec_array = np.zeros((1,dim),dtype=np.float32)
+            line_ = line.strip('\n').strip().split(' ')
+            for word in line_:
+                if word == word_padding and type(word_padding_vec) != None:
+                    vec_array = np.concatenate((vec_array,word_padding_vec),axis=0)
+                else:
+                    try:
+                        vec = np.array(vec_model.wv.get_vector(word),np.float32).reshape(1,dim)
+                        vec_array = np.concatenate((vec_array,vec),axis=0)
+                    except KeyError:
+                        vec_array = np.concatenate((vec_array,vec_padding),axis=0)
+            X.append(vec_array[1:])
+    np.save(save_path,X)
+    if replace_old == True:
+        shutil.move(save_path+'.npy',file_path)
+
+#文件依word2vec模型轉vec後返回ndarray
+def ToVec_file(file_path,vec_model,vec_padding,
+               encoding='utf-8',word_padding=None,word_padding_vec=None,dim=300):
+    """
+    vec_model : Word2vec model
+    dim = Dimension of Word2vec
+    vec_padding: Words that are not found in 'word2vec' are filled.
+    word_padding: Padded words in the line of original file
+    word_padding_vec: vec of word_padding
+    """
+    import numpy as np
+    with open(file_path,'r',encoding=encoding) as f:
+        X = []
+        for line in f:
+            vec_array = np.zeros((1,dim),dtype=np.float32)
+            line_ = line.strip('\n').strip().split(' ')
+            for word in line_:
+                if word == word_padding and type(word_padding_vec) != None:
+                    vec_array = np.concatenate((vec_array,word_padding_vec),axis=0)
+                else:
+                    try:
+                        vec = np.array(vec_model.wv.get_vector(word),np.float32).reshape(1,dim)
+                        vec_array = np.concatenate((vec_array,vec),axis=0)
+                    except KeyError:
+                        vec_array = np.concatenate((vec_array,vec_padding),axis=0)
+            X.append(vec_array[1:])
+        X = np.array(X)
+    return X
+
+#list依word2vec模型轉vec後返回ndarray
+def ToVec_list(line_list,vec_model,vec_padding,word_padding=None,word_padding_vec=None,dim=300):
+    """
+    vec_model : Word2vec model
+    dim = Dimension of Word2vec
+    vec_padding: Words that are not found in 'word2vec' are filled.
+    word_padding: Padded words in the line of original file
+    word_padding_vec: vec of word_padding
+    """
+    import numpy as np
+    X = []
+    for line in line_list:
+        vec_array = np.zeros((1,dim),dtype=np.float32)
+        for word in line:
+            if word == word_padding and type(word_padding_vec) != None:
+                vec_array = np.concatenate((vec_array,word_padding_vec),axis=0)
+            else:
+                try:
+                    vec = np.array(vec_model.wv.get_vector(word),np.float32).reshape(1,dim)
+                    vec_array = np.concatenate((vec_array,vec),axis=0)
+                except KeyError:
+                    vec_array = np.concatenate((vec_array,vec_padding),axis=0)
+        X.append(vec_array[1:])
+    X = np.array(X)
+    return X
+
+#list依word2vec模型轉vec後儲存
+def ToVec_list_save(line_list,save_path,vec_model,vec_padding,word_padding=None,word_padding_vec=None,dim=300):
+    """
+    vec_model : Word2vec model
+    dim = Dimension of Word2vec
+    vec_padding: Words that are not found in 'word2vec' are filled.
+    word_padding: Padded words in the line of original file
+    word_padding_vec: vec of word_padding
+    """
+    import numpy as np
+    X = []
+    for line in line_list:
+        vec_array = np.zeros((1,dim),dtype=np.float32)
+        for word in line:
+            if word == word_padding and type(word_padding_vec) != None:
+                vec_array = np.concatenate((vec_array,word_padding_vec),axis=0)
+            else:
+                try:
+                    vec = np.array(vec_model.wv.get_vector(word),np.float32).reshape(1,dim)
+                    vec_array = np.concatenate((vec_array,vec),axis=0)
+                except KeyError:
+                    vec_array = np.concatenate((vec_array,vec_padding),axis=0)
+        X.append(vec_array[1:])
+    X = np.array(X)
+    np.save(save_path,X)
+        
 
