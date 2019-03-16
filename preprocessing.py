@@ -28,10 +28,3 @@ ML_utils.CallF_DirFile_save(dir_path, ML_utils.Trim_file_rows,replace_old=True,
 sentiment_2_daat = ML_utils.Merge_dir_file(dir_path,save_name='sentiment_2_daat.txt',
                                            add_line_Feed=False,file_remove_LR=False,filter_='cut_')
 
-
-# In[3]:
-
-
-dir_path = r'D:\ml_data\GitHub\ML_Sentiment_analysis\word2vec_model'
-ML_utils.Word2vec_train(None,None,dir_path=dir_path,save_name='word2vec_model')
-
