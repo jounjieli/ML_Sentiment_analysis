@@ -48,11 +48,11 @@ model_path = r'D:\Backup\ml_data\GitHub\ML_Sentiment_analysis\word2vec_model\wor
 model = word2vec.Word2Vec.load(model_path)
 #vec_padding
 vec_padding = np.zeros((1,300),np.float32)
-ML_utils.ToVec_list_save(x,os.path.join(dir_path,'vec_x_neg1000_pos1000'),
+ML_utils.ToVec_list_save(x,os.path.join(dir_path,'vec_x_neg2000_pos2000'),
                          model,vec_padding,word_padding=0,word_padding_vec=vec_padding)
-y = np.concatenate( (np.full(1000,0),np.full(1000,1)) )
+y = np.concatenate( (np.full(2000,0),np.full(2000,1)) )
 y = pd.Series(y)
 y_one_hot_encoding = pd.get_dummies(y)
 y_one_hot_encoding = y_one_hot_encoding.to_numpy().astype(np.float32)
-np.save(os.path.join(dir_path,'vec_y_neg1000_pos1000'),y_one_hot_encoding)
+np.save(os.path.join(dir_path,'vec_y_neg2000_pos2000'),y_one_hot_encoding)
 

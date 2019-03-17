@@ -18,8 +18,8 @@ import matplotlib.pyplot as plt
 
 
 dir_path = r'D:\Backup\ml_data\GitHub\ML_Sentiment_analysis\Dataset'
-x = np.load(os.path.join(dir_path,'vec_x_neg1000_pos1000.npy'))
-y = np.load(os.path.join(dir_path,'vec_y_neg1000_pos1000.npy'))
+x = np.load(os.path.join(dir_path,'vec_x_neg2000_pos2000.npy'))
+y = np.load(os.path.join(dir_path,'vec_y_neg2000_pos2000.npy'))
 
 
 # In[3]:
