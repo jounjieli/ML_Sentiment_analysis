@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[11]:
 
 
 """
@@ -102,7 +102,7 @@ def Merge_dir_file(dir_path,save_name='dir_file_merge',file_filter_=None,regular
     file_remove_LR: read file and  remove LR
     add_line_Feed: add LR after file merge    
     """
-    file_list = Get_dir_file_list(dir_path,file_filter_=file_filter_,regular=False)
+    file_list = Get_dir_file_list(dir_path,file_filter_=file_filter_,regular=regular)
     file_merge = ""
     save_path = os.path.join(dir_path,save_name)
     for file_name in file_list: 
@@ -120,6 +120,17 @@ def Merge_dir_file(dir_path,save_name='dir_file_merge',file_filter_=None,regular
 def Remove_str_LR(str_in):
     str_out = re.sub(r"\n", r"", str_in)
     return str_out
+
+def Shuffle_file(file_path,save_path,replace_old=False,encoding='utf-8'):
+    import random
+    with open(file_path, 'r',encoding=encoding) as f:
+        f_list = list(f)
+        random.shuffle(f_list)
+    with open(save_path, 'w',encoding=encoding) as f:
+        for line in f_list:
+            f.write(line)
+    if replace_old == True:
+        shutil.move(save_path,file_path)
 
 #移除文件中重複的row，儲存
 def Remove_file_repeat_row(file_path,save_path,replace_old=False,encoding='utf-8'):
