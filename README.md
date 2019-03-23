@@ -18,11 +18,15 @@
 
 說明：共正負各1000筆。
 
-## train_word2vec
+## 訓練詞向量(train_word2vec)
 
-使用word2vec訓練其他語料(這邊有使用wiki百科、其他網路上蒐集的中文語料)，維度為300維。
+使用word2vec訓練其他語料，維度為300維，CBOW mode、window_size=10、min_count=5。
 
-## preprocessing ##
+語料:
+
+[DoubanConversaionCorpus](https://github.com/MarkWuNLP/MultiTurnResponseSelection)、[wiki](https://dumps.wikimedia.org/zhwiki/latest/zhwiki-latest-pages-articles.xml.bz2)
+
+## 預處理情感資料(preprocessing) ##
 
 使用ChnSentiCorp正負各3000筆資料，合併句子、移除重複句子、簡轉繁(opencc)、分詞(jieba)、刪除長度大於30個詞的句子、打亂順序(Shuffle)、負正各取3000筆合併。
 
@@ -30,7 +34,7 @@ sentiment_2_daat:格式為負評3000筆,正評3000筆共6000筆，以'\n'隔開�
 
 sentiment_2_daat轉成list後依word2vec模型轉換成vec，存成shape=(6000,30,300)的矩陣，作為feature。另外創建shape=(6000)的矩陣，前3000筆為0、後3000筆為1，作為label。
 
-## sentiment_analysis ##
+## 訓練情感分析模型(sentiment_analysis) ##
 
 4層LSTM、1層affine(linear)、1層affine(linear)+relu、輸出層softmax、使用MSEloss(沒有用Cross_entropy)、hidden_number=100，batch=400，epoch=200。
 
